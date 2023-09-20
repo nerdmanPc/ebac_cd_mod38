@@ -17,6 +17,7 @@ from pycaret.classification import *
 
 def options_form():
     with st.sidebar.form('Model settings'):
+        file = st.file_uploader('Upload', type=['ftr'])
         st.header('Model options')
         model_type = st.radio('Classifier type', [
             'lr',
@@ -29,6 +30,7 @@ def options_form():
 
         return {
             'updated': form_updated,
+            'file': file,
             'model_type' : model_type, 
             'sample_size': sample_size,
             'tune_model' : tune_model,
@@ -99,11 +101,10 @@ def main():
     st.title(title)
 
     options = options_form()
-    file = st.sidebar.file_uploader('Upload', type=['ftr'])
+    file = options['file']
     if not file:
         st.sidebar.info('Upload the .ftr file with training data!')
         st.stop()
-
 
     data = init_data(file)
 
